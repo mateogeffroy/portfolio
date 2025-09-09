@@ -7,7 +7,6 @@ import { ArrowLeft, ExternalLink, Github } from "lucide-react"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import ProjectGallery from "@/components/project-gallery"
-import ReactMarkdown from "react-markdown"
 
 export default function ProjectDetailPage({ params }) {
   const project = projectsData.find((p) => p.id.toString() === params.id)
@@ -60,8 +59,8 @@ export default function ProjectDetailPage({ params }) {
         <div className="container mx-auto px-4">
           <div className="mb-12">
             <h2 className="text-3xl font-semibold text-foreground mb-6">Descripción del Proyecto</h2>
-            <div className="prose prose-lg max-w-none text-xl text-muted-foreground leading-relaxed text-pretty">
-              <ReactMarkdown>{project.detailedDescription}</ReactMarkdown>
+            <div className="prose prose-lg max-w-none">
+              <p className="text-xl text-muted-foreground leading-relaxed text-pretty">{project.detailedDescription}</p>
             </div>
           </div>
           

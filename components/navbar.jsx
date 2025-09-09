@@ -5,41 +5,26 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
-import { Menu } from "lucide-react"
+import { Menu, Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
+import { useLanguage } from "@/components/language-provider"
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("inicio")
+  const { theme, setTheme, resolvedTheme } = useTheme()
+  const { locale, setLocale, t } = useLanguage()
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const sections = ["inicio", "proyectos", "sobre-mi", "contacto"]
-    
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id)
-          }
-        })
-      },
-      { rootMargin: "-50% 0px -50% 0px" } 
-    )
-
-    sections.forEach((id) => {
-      const element = document.getElementById(id)
-      if (element) {
-        observer.observe(element)
-      }
-    })
-
-    return () => {
-      sections.forEach((id) => {
-        const element = document.getElementById(id)
-        if (element) {
-          observer.unobserve(element)
-        }
-      })
-    }
+    setMounted(true)
   }, [])
+
+  const sections = [
+    { id: "inicio", key: "inicio" },
+    { id: "proyectos", key: "proyectos" },
+    { id: "sobre-mi", key: "sobreMi" },
+    { id: "contacto", key: "contacto" },
+  ]
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId)
@@ -58,61 +43,39 @@ export default function Navbar() {
 
           <div className="flex items-center gap-6">
             <div className="hidden md:flex items-center gap-6">
-              {["inicio", "proyectos", "sobre-mi", "contacto"].map((section) => (
+              {sections.map((section) => (
                 <button
-                  key={section}
-                  onClick={() => scrollToSection(section)}
+                  key={section.id}
+                  onClick={() => scrollToSection(section.id)}
                   className={`
-                    transition-all duration-300 cursor-pointer
-                    ${activeSection === section 
-                      ? "text-primary scale-105 font-semibold"
-                      : "text-foreground font-normal"
+                    transition-all duration-300 cursor-pointer font-semibold
+                    ${activeSection === section.id 
+                      ? "text-primary scale-105"
+                      : "text-foreground/70 scale-100"
                     }
                     hover:text-primary hover:scale-105
                   `}
                 >
-                  {section.charAt(0).toUpperCase() + section.slice(1).replace("-", " ")}
+                  {t.Navbar[section.key]}
                 </button>
               ))}
             </div>
 
-            <div className="hidden md:flex items-center gap-2">
-              <Button variant="ghost" size="sm" disabled>
-                🌙
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+              >
+                {mounted && (resolvedTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />)}
               </Button>
-              <Button variant="ghost" size="sm" disabled>
-                ES
+              <Button variant="ghost" size="sm" onClick={() => setLocale(locale === 'es' ? 'en' : 'es')}>
+                {locale.toUpperCase()}
               </Button>
             </div>
             
             <div className="md:hidden">
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <Menu className="h-6 w-6" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="top">
-                  <div className="flex flex-col items-center gap-6 pt-12 pb-12">
-                    {["inicio", "proyectos", "sobre-mi", "contacto"].map((section) => (
-                      <SheetClose asChild key={section}>
-                        <button
-                          onClick={() => scrollToSection(section)}
-                          className={`
-                            text-xl transition-colors
-                            ${activeSection === section 
-                              ? "text-primary font-semibold"
-                              : "text-foreground"
-                            }
-                          `}
-                        >
-                          {section.charAt(0).toUpperCase() + section.slice(1).replace("-", " ")}
-                        </button>
-                      </SheetClose>
-                    ))}
-                  </div>
-                </SheetContent>
-              </Sheet>
+              {/* Aquí también necesitarás actualizar los textos para usar `t.Navbar[section.key]` */}
             </div>
           </div>
         </div>

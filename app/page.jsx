@@ -7,13 +7,15 @@ import Footer from "@/components/footer"
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen">
+    <>
       <Navbar />
-      <Hero />
-      <ProjectsSection />
-      <AboutSection />
-      <ContactSection />
+      <main>
+        <Hero />
+        <ProjectsSection />
+        <AboutSection />
+        <ContactSection />
+      </main>
       <Footer />
-    </main>
+    </>
   )
 }

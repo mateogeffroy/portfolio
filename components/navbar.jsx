@@ -4,7 +4,15 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
+import { 
+  Sheet, 
+  SheetContent, 
+  SheetTrigger, 
+  SheetClose,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet"
 import { Menu, Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useLanguage } from "@/components/language-provider"
@@ -41,7 +49,7 @@ export default function Navbar() {
             <Image src="/logo-mag.png" alt="Logo MAG" width={120} height={80} priority />
           </Link>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center">
             <div className="hidden md:flex items-center gap-6">
               {sections.map((section) => (
                 <button
@@ -61,13 +69,14 @@ export default function Navbar() {
               ))}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 ml-6">
               <Button 
                 variant="ghost" 
                 size="sm"
                 onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+                aria-label="Cambiar tema"
               >
-                {mounted && (resolvedTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />)}
+                {!mounted ? <div className="w-5 h-5" /> : (resolvedTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />)}
               </Button>
               <Button variant="ghost" size="sm" onClick={() => setLocale(locale === 'es' ? 'en' : 'es')}>
                 {locale.toUpperCase()}
@@ -75,7 +84,39 @@ export default function Navbar() {
             </div>
             
             <div className="md:hidden">
-              {/* Aquí también necesitarás actualizar los textos para usar `t.Navbar[section.key]` */}
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="top">
+                  <SheetHeader className="sr-only">
+                    <SheetTitle>Menú de Navegación</SheetTitle>
+                    <SheetDescription>
+                      Enlaces para navegar por las diferentes secciones del portafolio.
+                    </SheetDescription>
+                  </SheetHeader>
+                  <div className="flex flex-col items-center gap-6 pt-12 pb-12">
+                    {sections.map((section) => (
+                      <SheetClose asChild key={section.id}>
+                        <button
+                          onClick={() => scrollToSection(section.id)}
+                          className={`
+                            text-xl transition-colors font-semibold
+                            ${activeSection === section.id 
+                              ? "text-primary"
+                              : "text-foreground"
+                            }
+                          `}
+                        >
+                          {t.Navbar[section.key]}
+                        </button>
+                      </SheetClose>
+                    ))}
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </div>

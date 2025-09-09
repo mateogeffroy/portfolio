@@ -54,7 +54,7 @@ export default function Hero() {
             asChild
             className="text-lg px-8 py-3 bg-transparent border-white text-white hover:bg-white hover:text-black"
           >
-            <a href="/mateo-arturo-geffroy-cv.pdf" target="_blank" rel="noopener noreferrer">
+            <a href="/cv.pdf" target="_blank" rel="noopener noreferrer">
               Ver CV
             </a>
           </Button>

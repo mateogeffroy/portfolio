@@ -1,36 +1,60 @@
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+"use client"
+
+import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { ExternalLink, Github } from "lucide-react"
 
 export default function ProjectCard({ project }) {
+  const router = useRouter()
+
+  const handleCardClick = () => {
+    router.push(`/proyecto/${project.id}`)
+  }
+
+  const handleGithubClick = (e) => {
+    e.stopPropagation()
+  }
+
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      <div className="aspect-video relative overflow-hidden">
-        <img
+    <Card
+      onClick={handleCardClick}
+      className="overflow-hidden p-0 shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer flex flex-col"
+    >
+      <div className="w-full h-48 relative bg-white">
+        <Image
           src={project.image || "/placeholder.svg"}
           alt={project.title}
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-contain p-4"
         />
       </div>
-      <CardContent className="p-6">
+      <div className="p-6 flex flex-col flex-grow">
         <h3 className="text-xl font-semibold mb-2 text-foreground">{project.title}</h3>
-        <p className="text-muted-foreground text-sm leading-relaxed">{project.description}</p>
-      </CardContent>
-      <CardFooter className="p-6 pt-0 flex gap-3">
-        <Button asChild size="sm" className="flex-1">
+        <p className="text-muted-foreground text-sm leading-relaxed flex-grow">{project.description}</p>
+      </div>
+      <div className="p-6 pt-0 mt-auto grid grid-cols-2 gap-4">
+        <Button asChild size="sm">
           <Link href={`/proyecto/${project.id}`}>
             <ExternalLink className="w-4 h-4 mr-2" />
             Ver detalles
           </Link>
         </Button>
-        <Button variant="outline" size="sm" asChild>
-          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+        <Button variant="ghost" size="sm" asChild onClick={handleGithubClick}>
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-foreground hover:bg-transparent hover:underline hover:text-foreground"
+          >
             <Github className="w-4 h-4 mr-2" />
-            GitHub
+            Ver repositorio
           </a>
         </Button>
-      </CardFooter>
+      </div>
     </Card>
   )
 }

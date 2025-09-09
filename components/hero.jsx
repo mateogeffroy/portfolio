@@ -21,10 +21,9 @@ export default function Hero() {
         <Image
           src="/placeholder-code-bg.png"
           alt="Fondo de código difuminado"
-          layout="fill"
-          objectFit="cover"
-          quality={100}
-          className="filter blur-sm brightness-75"
+          fill
+          sizes="100vw"
+          className="object-cover filter blur-sm brightness-75"
           priority
         />
       </div>
@@ -52,9 +51,12 @@ export default function Hero() {
           <Button
             variant="outline"
             size="lg"
+            asChild
             className="text-lg px-8 py-3 bg-transparent border-white text-white hover:bg-white hover:text-black"
           >
-            Ver CV
+            <a href="/mateo-arturo-geffroy-cv.pdf" target="_blank" rel="noopener noreferrer">
+              Ver CV
+            </a>
           </Button>
         </div>
       </div>

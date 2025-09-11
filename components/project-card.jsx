@@ -21,7 +21,13 @@ export default function ProjectCard({ project }) {
   return (
     <Card
       onClick={handleCardClick}
-      className="overflow-hidden p-0 shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer flex flex-col"
+      className="
+        overflow-hidden p-0 flex flex-col h-full
+        bg-card
+        border-0
+        shadow-2xl shadow-black/100
+        cursor-pointer
+      "
     >
       <div className="w-full h-48 relative bg-white">
         <Image

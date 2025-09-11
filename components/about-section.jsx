@@ -1,23 +1,33 @@
+"use client"
+
 import { Card, CardContent } from "@/components/ui/card"
-import { MapPin, Globe, Mail } from "lucide-react"
+import { MapPin, Globe, Mail, User, GraduationCap, Code } from "lucide-react"
 
 const skills = {
-  frontend: ["React", "JavaScript", "HTML5", "CSS3", "Tailwind CSS"],
-  backend: ["Python", "Django", "MySQL", "PostgreSQL"],
-  herramientas: ["GitHub", "VS Code", "Visual Studio", "Figma", "Docker"],
+  Frontend: ["React", "JavaScript", "HTML5", "CSS3", "Tailwind CSS"],
+  Backend: ["Python", "Django", "MySQL", "PostgreSQL"],
+  Herramientas: ["GitHub", "VS Code", "Visual Studio", "Figma", "Docker"],
+}
+
+const skillStyles = {
+  Frontend: "bg-primary/10 text-primary",
+  Backend: "bg-accent/10 text-accent",
+  Herramientas: "bg-accent/10 text-accent",
 }
 
 export default function AboutSection() {
   return (
     <section id="sobre-mi" className="py-20 bg-background">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-foreground mb-16">Sobre Mi</h2>
+        <h2 className="text-4xl font-bold text-center text-foreground mb-16">Sobre Mí</h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Información Personal */}
-          <Card className="bg-card">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-semibold mb-6 text-foreground">Información Personal</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+          <Card className="bg-card border-0 shadow-2xl shadow-black/20 flex flex-col">
+            <CardContent className="p-8 flex-grow">
+              <h3 className="text-2xl font-semibold mb-6 text-foreground flex items-center gap-3">
+                <User className="w-6 h-6" />
+                Información Personal
+              </h3>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-primary" />
@@ -35,10 +45,12 @@ export default function AboutSection() {
             </CardContent>
           </Card>
 
-          {/* Educación */}
-          <Card className="bg-card">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-semibold mb-6 text-foreground">Educación</h3>
+          <Card className="bg-card border-0 shadow-2xl shadow-black/20 flex flex-col">
+            <CardContent className="p-8 flex-grow">
+              <h3 className="text-2xl font-semibold mb-6 text-foreground flex items-center gap-3">
+                <GraduationCap className="w-6 h-6" />
+                Educación
+              </h3>
               <div className="space-y-6">
                 <div>
                   <h4 className="font-semibold text-foreground">Colegio Sagrado Corazón de Jesús</h4>
@@ -56,41 +68,25 @@ export default function AboutSection() {
             </CardContent>
           </Card>
 
-          {/* Habilidades */}
-          <Card className="bg-card">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-semibold mb-6 text-foreground">Mis Habilidades</h3>
+          <Card className="bg-card border-0 shadow-2xl shadow-black/20 flex flex-col">
+            <CardContent className="p-8 flex-grow">
+              <h3 className="text-2xl font-semibold mb-6 text-foreground flex items-center gap-3">
+                <Code className="w-6 h-6" />
+                Mis Habilidades
+              </h3>
               <div className="space-y-6">
-                <div>
-                  <h4 className="font-semibold text-foreground mb-3">Frontend</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {skills.frontend.map((skill) => (
-                      <span key={skill} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
-                        {skill}
-                      </span>
-                    ))}
+                {Object.entries(skills).map(([category, skillList]) => (
+                  <div key={category}>
+                    <h4 className="font-semibold text-foreground mb-3">{category}</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {skillList.map((skill) => (
+                        <span key={skill} className={`px-3 py-1 rounded-full text-sm ${skillStyles[category] || 'bg-muted/10 text-muted'}`}>
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-foreground mb-3">Backend</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {skills.backend.map((skill) => (
-                      <span key={skill} className="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-sm">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-foreground mb-3">Herramientas</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {skills.herramientas.map((skill) => (
-                      <span key={skill} className="px-3 py-1 bg-accent/10 text-accent rounded-full text-sm">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                ))}
               </div>
             </CardContent>
           </Card>

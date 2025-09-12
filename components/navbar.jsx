@@ -13,7 +13,7 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet"
-import { Menu, Moon, Sun } from "lucide-react"
+import { Menu, Moon, Sun, Languages } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useLanguage } from "@/components/language-provider"
 
@@ -33,6 +33,35 @@ export default function Navbar() {
     { id: "sobre-mi", key: "sobreMi" },
     { id: "contacto", key: "contacto" },
   ]
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id)
+          }
+        })
+      },
+      { rootMargin: "-50% 0px -50% 0px" } 
+    )
+
+    sections.forEach((section) => {
+      const element = document.getElementById(section.id)
+      if (element) {
+        observer.observe(element)
+      }
+    })
+
+    return () => {
+      sections.forEach((section) => {
+        const element = document.getElementById(section.id)
+        if (element) {
+          observer.unobserve(element)
+        }
+      })
+    }
+  }, [])
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId)
@@ -56,7 +85,7 @@ export default function Navbar() {
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
                   className={`
-                    transition-all duration-300 cursor-pointer font-semibold
+                    transition-transform duration-300 cursor-pointer font-semibold
                     ${activeSection === section.id 
                       ? "text-primary scale-105"
                       : "text-foreground/70 scale-100"
@@ -75,18 +104,19 @@ export default function Navbar() {
                 size="sm"
                 onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
                 aria-label="Cambiar tema"
+                className="cursor-pointer"
               >
                 {!mounted ? <div className="w-5 h-5" /> : (resolvedTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />)}
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => setLocale(locale === 'es' ? 'en' : 'es')}>
-                {locale.toUpperCase()}
+              <Button variant="ghost" size="sm" onClick={() => setLocale(locale === 'es' ? 'en' : 'es')} className="cursor-pointer">
+                <Languages className="w-5 h-5" />
               </Button>
             </div>
             
             <div className="md:hidden">
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon">
+                  <Button variant="ghost" size="icon" className="cursor-pointer ring-offset-0 focus-visible:ring-0">
                     <Menu className="h-6 w-6" />
                   </Button>
                 </SheetTrigger>
@@ -103,7 +133,7 @@ export default function Navbar() {
                         <button
                           onClick={() => scrollToSection(section.id)}
                           className={`
-                            text-xl transition-colors font-semibold
+                            text-xl cursor-pointer transition-colors font-semibold
                             ${activeSection === section.id 
                               ? "text-primary"
                               : "text-foreground"

@@ -1,14 +1,19 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Linkedin, Mail } from "lucide-react"
+import { useLanguage } from "@/components/language-provider"
 
 export default function ContactSection() {
+  const { t } = useLanguage()
+
   return (
     <section id="contacto" className="py-30 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-foreground mb-6">Contacto</h2>
+          <h2 className="text-4xl font-bold text-foreground mb-6">{t.ContactSection.titulo}</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-            ¿Tienes un proyecto en mente? Me encantaría escuchar sobre él y ver cómo puedo ayudarte.
+            {t.ContactSection.subtitulo}
           </p>
         </div>
 
@@ -18,7 +23,7 @@ export default function ContactSection() {
               <a href="mailto:mateogeffroy@gmail.com" className="flex items-center justify-center gap-3">
                 <Mail className="w-6 h-6" />
                 <div className="text-left">
-                  <div className="font-semibold">Email</div>
+                  <div className="font-semibold">{t.ContactSection.email}</div>
                   <div className="text-sm opacity-90">mateogeffroy@gmail.com</div>
                 </div>
               </a>
@@ -33,8 +38,8 @@ export default function ContactSection() {
               >
                 <Linkedin className="w-6 h-6" />
                 <div className="text-left">
-                  <div className="font-semibold">LinkedIn</div>
-                  <div className="text-sm opacity-70">Conectemos</div>
+                  <div className="font-semibold">{t.ContactSection.linkedin}</div>
+                  <div className="text-sm opacity-70">{t.ContactSection.linkedinSub}</div>
                 </div>
               </a>
             </Button>

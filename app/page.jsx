@@ -9,7 +9,7 @@ export default function HomePage() {
   return (
     <>
       <Navbar />
-      <main className="flex-grow flex flex-col">
+      <main>
         <Hero />
         <ProjectsSection />
         <AboutSection />

@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { MapPin, Globe, Mail, User, GraduationCap, Code } from "lucide-react"
+import { useLanguage } from "@/components/language-provider"
 
 const skills = {
   Frontend: ["React", "JavaScript", "HTML5", "CSS3", "Tailwind CSS"],
@@ -11,31 +12,33 @@ const skills = {
 
 const skillStyles = {
   Frontend: "bg-primary/10 text-primary",
-  Backend: "bg-accent/10 text-accent",
-  Herramientas: "bg-accent/10 text-accent",
+  Backend: "bg-accent/10 text-primary",
+  Herramientas: "bg-accent/10 text-primary",
 }
 
 export default function AboutSection() {
+  const { t } = useLanguage()
+
   return (
     <section id="sobre-mi" className="py-20 bg-background">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-foreground mb-16">Sobre Mí</h2>
+        <h2 className="text-4xl font-bold text-center text-foreground mb-16">{t.AboutSection.titulo}</h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-          <Card className="bg-card border-0 shadow-2xl shadow-black/20 flex flex-col">
+          <Card className="bg-card border-0 shadow-2xl shadow-black/20 flex flex-col min-h-[420px]">
             <CardContent className="p-8 flex-grow">
               <h3 className="text-2xl font-semibold mb-6 text-foreground flex items-center gap-3">
                 <User className="w-6 h-6" />
-                Información Personal
+                {t.AboutSection.infoPersonal}
               </h3>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-primary" />
-                  <span className="text-card-foreground">La Plata, Buenos Aires, Argentina</span>
+                  <span className="text-card-foreground">{t.AboutSection.ubicacion}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Globe className="w-5 h-5 text-primary" />
-                  <span className="text-card-foreground">Español (Nativo), Inglés (Intermedio)</span>
+                  <span className="text-card-foreground">{t.AboutSection.idiomas}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-primary" />
@@ -45,34 +48,34 @@ export default function AboutSection() {
             </CardContent>
           </Card>
 
-          <Card className="bg-card border-0 shadow-2xl shadow-black/20 flex flex-col">
+          <Card className="bg-card border-0 shadow-2xl shadow-black/20 flex flex-col min-h-[420px]">
             <CardContent className="p-8 flex-grow">
               <h3 className="text-2xl font-semibold mb-6 text-foreground flex items-center gap-3">
                 <GraduationCap className="w-6 h-6" />
-                Educación
+                {t.AboutSection.educacion}
               </h3>
               <div className="space-y-6">
                 <div>
-                  <h4 className="font-semibold text-foreground">Colegio Sagrado Corazón de Jesús</h4>
-                  <p className="text-muted-foreground">Bachiller en Ciencias Naturales</p>
+                  <h4 className="font-semibold text-foreground">{t.AboutSection.educacionTitulo1}</h4>
+                  <p className="text-muted-foreground">{t.AboutSection.educacionSubtitulo1}</p>
                   <p className="text-sm text-muted-foreground">2014 - 2019</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-foreground">
-                    Universidad Tecnológica Nacional - Facultad Regional de La Plata
+                    {t.AboutSection.educacionTitulo2}
                   </h4>
-                  <p className="text-muted-foreground">Ingeniería en Sistemas de Información</p>
+                  <p className="text-muted-foreground">{t.AboutSection.educacionSubtitulo2}</p>
                   <p className="text-sm text-muted-foreground">2022 - Actualidad</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-card border-0 shadow-2xl shadow-black/20 flex flex-col">
+          <Card className="bg-card border-0 shadow-2xl shadow-black/20 flex flex-col min-h-[420px]">
             <CardContent className="p-8 flex-grow">
               <h3 className="text-2xl font-semibold mb-6 text-foreground flex items-center gap-3">
                 <Code className="w-6 h-6" />
-                Mis Habilidades
+                {t.AboutSection.habilidades}
               </h3>
               <div className="space-y-6">
                 {Object.entries(skills).map(([category, skillList]) => (

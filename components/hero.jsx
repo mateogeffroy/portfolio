@@ -3,8 +3,10 @@
 import { Button } from "@/components/ui/button"
 import { TypeAnimation } from "react-type-animation"
 import Image from "next/image"
+import { useLanguage } from "@/components/language-provider"
 
 export default function Hero() {
+  const { t } = useLanguage()
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId)
     if (element) {
@@ -38,24 +40,21 @@ export default function Hero() {
             className="text-5xl md:text-7xl font-bold text-white mb-6 text-balance"
           />
         </div>
-        <h2
-          className="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto text-pretty"
-        >
-          Estudiante de ingeniería en sistemas de información y desarrollador de software capacitado en la creación de
-          soluciones tecnológicas.
+        <h2 className="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto text-pretty">
+          {t.Hero.subtitulo}
         </h2>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" onClick={() => scrollToSection("proyectos")} className="text-lg px-8 py-3">
-            Ver proyectos
+          <Button size="lg" onClick={() => scrollToSection("proyectos")} className="text-lg px-8 py-3 cursor-pointer">
+            {t.Hero.botonProyectos}
           </Button>
           <Button
             variant="outline"
             size="lg"
             asChild
-            className="text-lg px-8 py-3 bg-transparent border-white text-white hover:bg-white hover:text-black"
+            className="text-lg px-8 py-3 bg-transparent border-white text-white hover:bg-white/50"
           >
             <a href="/cv.pdf" target="_blank" rel="noopener noreferrer">
-              Ver CV
+              {t.Hero.botonCV}
             </a>
           </Button>
         </div>

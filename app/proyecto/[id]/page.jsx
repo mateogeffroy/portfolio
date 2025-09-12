@@ -1,3 +1,5 @@
+"use client"
+
 import { projectsData } from "@/lib/projectsData"
 import { notFound } from "next/navigation"
 import Link from "next/link"
@@ -7,8 +9,13 @@ import { ArrowLeft, ExternalLink, Github } from "lucide-react"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import ProjectGallery from "@/components/project-gallery"
+import { useLanguage } from "@/components/language-provider"
+import ReactMarkdown from "react-markdown"
+import { useParams } from "next/navigation"
 
-export default function ProjectDetailPage({ params }) {
+export default function ProjectDetailPage() {
+  const params = useParams()
+  const { locale } = useLanguage()
   const project = projectsData.find((p) => p.id.toString() === params.id)
 
   if (!project) {
@@ -29,7 +36,7 @@ export default function ProjectDetailPage({ params }) {
             <div className="relative w-full h-full">
               <Image
                 src={project.image}
-                alt={`Logo de ${project.title}`}
+                alt={project.title[locale]}
                 fill
                 sizes="50vw"
                 className="object-contain"
@@ -52,15 +59,15 @@ export default function ProjectDetailPage({ params }) {
 
         <div className="container mx-auto px-4 -mt-16 relative z-30 text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-foreground text-balance">
-            {project.title}
+            {project.title[locale]}
           </h1>
         </div>
 
         <div className="container mx-auto px-4">
           <div className="mb-12">
             <h2 className="text-3xl font-semibold text-foreground mb-6">Descripción del Proyecto</h2>
-            <div className="prose prose-lg max-w-none">
-              <p className="text-xl text-muted-foreground leading-relaxed text-pretty">{project.detailedDescription}</p>
+            <div className="prose prose-lg max-w-none text-xl text-muted-foreground leading-relaxed text-pretty">
+              <ReactMarkdown>{project.detailedDescription[locale]}</ReactMarkdown>
             </div>
           </div>
           
@@ -102,6 +109,7 @@ export default function ProjectDetailPage({ params }) {
                 </Button>
             </div>
         </div>
+
       </main>
 
       <Footer />

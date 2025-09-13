@@ -1,105 +1,299 @@
 "use client"
 
+
+
 import * as React from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+
+ Carousel,
+
+ CarouselContent,
+
+ CarouselItem,
+
+ CarouselNext,
+
+ CarouselPrevious,
+
 } from "@/components/ui/carousel"
+
+import Autoplay from "embla-carousel-autoplay"
+
 import Image from "next/image"
 
+import { useLanguage } from "@/components/language-provider"
+
+import {
+
+ Dialog,
+
+ DialogContent,
+
+ DialogTitle,
+
+} from "@/components/ui/dialog"
+
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
+
+import { ChevronLeft, ChevronRight } from "lucide-react"
+
+
+
 export default function ProjectGallery({ media }) {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [selectedIndex, setSelectedIndex] = React.useState(0)
-  const [api, setApi] = React.useState()
-  const [current, setCurrent] = React.useState(0)
 
-  React.useEffect(() => {
-    if (!api) return
-    const onSelect = () => {
-      setCurrent(api.selectedScrollSnap())
-    }
-    onSelect()
-    api.on("select", onSelect)
-    return () => api.off("select", onSelect)
-  }, [api])
+ const { locale, t } = useLanguage()
 
-  const openDialog = (index) => {
-    setSelectedIndex(index)
-    setIsOpen(true)
-    if (api) {
-      api.scrollTo(index, true)
-    }
-  }
+ const [api, setApi] = React.useState()
 
-  return (
-    <div>
-      <h2 className="text-3xl font-semibold text-foreground mb-6">Galería</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {media.map((item, index) => (
-          <div key={index} className="overflow-hidden rounded-lg border cursor-pointer group" onClick={() => openDialog(index)}>
-            <div className="relative h-64 bg-muted">
-              <Image
-                src={item.src}
-                alt={item.title || `Miniatura de galería ${index + 1}`}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover"
-              />
-            </div>
-          </div>
+ const [current, setCurrent] = React.useState(0)
+
+
+
+ const [selectedIndex, setSelectedIndex] = React.useState(null)
+
+
+
+ const plugin = React.useRef(
+
+  Autoplay({ delay: 3000, stopOnInteraction: true })
+
+ )
+
+
+
+ React.useEffect(() => {
+
+  if (!api) return
+
+  const onSelect = () => setCurrent(api.selectedScrollSnap())
+
+  onSelect()
+
+  api.on("select", onSelect)
+
+  return () => api.off("select", onSelect)
+
+ }, [api])
+
+
+
+ const handleOpenImage = (index) => {
+
+  setSelectedIndex(index)
+
+  plugin.current.stop() // detener autoplay cuando se abre modal
+
+ }
+
+
+
+ const handleCloseImage = () => {
+
+  setSelectedIndex(null)
+
+  plugin.current.reset() // reanudar autoplay al cerrar modal
+
+ }
+
+
+
+ const next = () => setSelectedIndex((prev) => (prev + 1) % media.length)
+
+ const prev = () => setSelectedIndex((prev) => (prev - 1 + media.length) % media.length)
+
+
+
+ return (
+
+  <div>
+
+   <h2 className="text-3xl font-semibold text-foreground mb-6">
+
+    {t.ProjectDetailPage.galleryTitle}
+
+   </h2>
+
+
+
+   {/* Carrusel principal */}
+
+   <Carousel
+
+    plugins={[plugin.current]}
+
+    setApi={setApi}
+
+    onMouseEnter={plugin.current.stop}
+
+    onMouseLeave={plugin.current.reset}
+
+    opts={{ loop: true }}
+
+    className="w-full"
+
+   >
+
+    <CarouselContent>
+
+     {media.map((item, index) => (
+
+      <CarouselItem
+
+       key={index}
+
+       className="md:basis-1/3 sm:basis-1/1"
+
+      >
+
+       <button
+
+        onClick={() => handleOpenImage(index)}
+
+        className="w-full h-full aspect-video relative overflow-hidden rounded-lg cursor-pointer group"
+
+       >
+
+        <Image
+
+         src={item.src}
+
+         alt={item.title[locale] || `Imagen ${index + 1}`}
+
+         fill
+
+         sizes="(max-width: 768px) 100vw, 33vw"
+
+         className="object-cover transition-transform duration-300 group-hover:scale-105"
+
+        />
+
+       </button>
+
+      </CarouselItem>
+
+     ))}
+
+    </CarouselContent>
+
+    <CarouselPrevious />
+
+    <CarouselNext />
+
+   </Carousel>
+
+
+
+   {/* Modal de imagen ampliada */}
+
+   <Dialog open={selectedIndex !== null} onOpenChange={handleCloseImage}>
+
+    <DialogContent className="max-w-4xl bg-transparent border-none shadow-none">
+
+     <VisuallyHidden>
+
+      <DialogTitle>Imagen ampliada</DialogTitle>
+
+     </VisuallyHidden>
+
+
+
+     {selectedIndex !== null && (
+
+      <div className="flex flex-col items-center">
+
+       {/* Imagen principal */}
+
+       <div className="relative flex items-center justify-center max-w-4xl w-full">
+
+        <button
+
+         onClick={prev}
+
+         className="absolute left-0 p-2 text-white"
+
+        >
+
+         <ChevronLeft size={40} />
+
+        </button>
+
+
+
+        <img
+
+         src={media[selectedIndex].src}
+
+         alt={media[selectedIndex].title?.[locale] || ""}
+
+         className="max-h-[80vh] object-contain cursor-zoom-in"
+
+         onClick={(e) => {
+
+          e.currentTarget.classList.toggle("scale-150")
+
+         }}
+
+        />
+
+
+
+        <button
+
+         onClick={next}
+
+         className="absolute right-0 p-2 text-white"
+
+        >
+
+         <ChevronRight size={40} />
+
+        </button>
+
+       </div>
+
+
+
+       {/* Miniaturas */}
+
+       <div className="flex gap-2 mt-4 overflow-x-auto max-w-4xl">
+
+        {media.map((item, idx) => (
+
+         <img
+
+          key={idx}
+
+          src={item.src}
+
+          alt={item.title?.[locale] || ""}
+
+          onClick={() => setSelectedIndex(idx)}
+
+          className={`h-20 w-32 object-cover rounded cursor-pointer transition
+
+           ${idx === selectedIndex
+
+            ? "ring-4 ring-blue-500"
+
+            : "opacity-60 hover:opacity-100"}`}
+
+         />
+
         ))}
+
+       </div>
+
       </div>
 
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="w-[90vw] h-[95vh] max-w-none bg-transparent border-none shadow-none flex flex-col items-center justify-center p-0">
-          <DialogHeader className="sr-only">
-            <DialogTitle>Galería de Imágenes del Proyecto</DialogTitle>
-            <DialogDescription>
-              Navega por las imágenes del proyecto.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <Carousel setApi={setApi} opts={{ startIndex: selectedIndex, loop: true }} className="w-full">
-            <CarouselContent>
-              {media.map((item, index) => (
-                <CarouselItem 
-                  key={index} 
-                  className="flex items-center justify-center"
-                >
-                  <Image
-                    src={item.src}
-                    alt={item.title || `Imagen de galería ${index + 1}`}
-                    width={1920}
-                    height={1080}
-                    className="w-auto h-auto max-w-full max-h-full object-contain"
-                  />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="left-2 text-white bg-black/50 hover:bg-black/80 hover:text-white" />
-            <CarouselNext className="right-2 text-white bg-black/50 hover:bg-black/80 hover:text-white" />
-          </Carousel>
-          
-          <div className="mt-4 flex flex-col items-center gap-2 w-full px-4">
-            <p className="text-white text-sm bg-black/30 px-2 py-1 rounded-md">{media[current]?.title}</p>
-            <div className="flex gap-2">
-              {media.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => api?.scrollTo(index)}
-                  className={`transition-all duration-300 rounded-full
-                    ${index === current ? 'w-4 h-4 bg-white' : 'w-2 h-2 bg-gray-500'}
-                  `}
-                />
-              ))}
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
-  )
+     )}
+
+    </DialogContent>
+
+   </Dialog>
+
+  </div>
+
+ )
+
 }

@@ -1,19 +1,25 @@
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
-import { MapPin, Globe, Mail, User, GraduationCap, Code } from "lucide-react"
+import { MapPin, Globe, Mail, User, GraduationCap, Code, Database, Wrench, Monitor } from "lucide-react"
 import { useLanguage } from "@/components/language-provider"
 
 const skills = {
-  Frontend: ["React", "JavaScript", "HTML5", "CSS3", "Tailwind CSS"],
-  Backend: ["Python", "Django", "MySQL", "PostgreSQL"],
-  Herramientas: ["GitHub", "VS Code", "Visual Studio", "Figma", "Docker"],
-}
-
-const skillStyles = {
-  Frontend: "bg-primary/10 text-primary",
-  Backend: "bg-accent/10 text-primary",
-  Herramientas: "bg-accent/10 text-primary",
+  Frontend: {
+    icon: Monitor,
+    style: "text-primary bg-primary/10",
+    items: ["Next", "React", "JavaScript", "TypeScript", "HTML5", "CSS3", "Tailwind CSS"],
+  },
+  Backend: {
+    icon: Database,
+    style: "text-primary bg-primary/10",
+    items: ["Python", "Node", "Django", "Flask", "PostgreSQL", "SQLite"],
+  },
+  Herramientas: {
+    icon: Wrench,
+    style: "text-primary bg-primary/10",
+    items: ["GitHub", "VS Code", "Visual Studio", "Figma", "Docker", "Postman"],
+  },
 }
 
 export default function AboutSection() {
@@ -42,7 +48,7 @@ export default function AboutSection() {
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-primary" />
-                  <span className="text-card-foreground">mateogeffroy@gmail.com</span>
+                  <span className="text-card-foreground">mateogeffroy.dev@gmail.com</span>
                 </div>
               </div>
             </CardContent>
@@ -65,7 +71,14 @@ export default function AboutSection() {
                     {t.AboutSection.educacionTitulo2}
                   </h4>
                   <p className="text-muted-foreground">{t.AboutSection.educacionSubtitulo2}</p>
-                  <p className="text-sm text-muted-foreground">2022 - Actualidad</p>
+                  <p className="text-sm text-muted-foreground">2022 - 2025</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-foreground">
+                    {t.AboutSection.educacionTitulo3}
+                  </h4>
+                  <p className="text-muted-foreground">{t.AboutSection.educacionSubtitulo2}</p>
+                  <p className="text-sm text-muted-foreground">{t.AboutSection.periodo}</p>
                 </div>
               </div>
             </CardContent>
@@ -78,12 +91,15 @@ export default function AboutSection() {
                 {t.AboutSection.habilidades}
               </h3>
               <div className="space-y-6">
-                {Object.entries(skills).map(([category, skillList]) => (
+                {Object.entries(skills).map(([category, { icon: Icon, style, items }]) => (
                   <div key={category}>
-                    <h4 className="font-semibold text-foreground mb-3">{category}</h4>
+                    <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                      <Icon className="w-5 h-5" />
+                      {category}
+                    </h4>
                     <div className="flex flex-wrap gap-2">
-                      {skillList.map((skill) => (
-                        <span key={skill} className={`px-3 py-1 rounded-full text-sm ${skillStyles[category] || 'bg-muted/10 text-muted'}`}>
+                      {items.map((skill) => (
+                        <span key={skill} className={`px-3 py-1 rounded-full text-sm ${style}`}>
                           {skill}
                         </span>
                       ))}

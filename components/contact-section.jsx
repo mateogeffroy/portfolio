@@ -24,7 +24,7 @@ export default function ContactSection() {
                 <Mail className="w-6 h-6" />
                 <div className="text-left">
                   <div className="font-semibold">{t.ContactSection.email}</div>
-                  <div className="text-sm opacity-90">mateogeffroy@gmail.com</div>
+                  <div className="text-sm opacity-90">mateogeffroy.dev@gmail.com</div>
                 </div>
               </a>
             </Button>

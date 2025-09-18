@@ -15,12 +15,15 @@ import { useParams } from "next/navigation"
 
 export default function ProjectDetailPage() {
   const params = useParams()
-  const { locale } = useLanguage()
+  const { locale, t } = useLanguage() // Obtenemos la función de traducción 't'
   const project = projectsData.find((p) => p.id.toString() === params.id)
 
   if (!project) {
     notFound()
   }
+
+  // Si 't' aún no se ha cargado, puedes mostrar un estado de carga o null
+  if (!t) return null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -51,7 +54,7 @@ export default function ProjectDetailPage() {
             <Button asChild variant="outline" className="bg-transparent border-foreground/20 text-foreground/80 hover:bg-foreground hover:text-background">
               <Link href="/#proyectos">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Volver
+                {t.ProjectDetailPage.backButton}
               </Link>
             </Button>
           </div>
@@ -65,7 +68,7 @@ export default function ProjectDetailPage() {
 
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h2 className="text-3xl font-semibold text-foreground mb-6">Descripción del Proyecto</h2>
+            <h2 className="text-3xl font-semibold text-foreground mb-6">{t.ProjectDetailPage.descriptionTitle}</h2>
             <div className="prose prose-lg max-w-none text-xl text-muted-foreground leading-relaxed text-pretty">
               <ReactMarkdown>{project.detailedDescription[locale]}</ReactMarkdown>
             </div>
@@ -79,7 +82,7 @@ export default function ProjectDetailPage() {
 
           {project.demoVideoUrl && (
             <div className="mb-12">
-              <h2 className="text-3xl font-semibold text-foreground mb-6">Video Demostración</h2>
+              <h2 className="text-3xl font-semibold text-foreground mb-6">{t.ProjectDetailPage.demoVideoTitle}</h2>
               <div className="overflow-hidden rounded-lg border aspect-video">
                 <video
                   src={project.demoVideoUrl}
@@ -91,14 +94,12 @@ export default function ProjectDetailPage() {
           )}
         </div>
         
-        
-
         <div className="container mx-auto px-4 mt-12">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild variant="outline" size="lg">
               <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                 <Github className="w-5 h-5 mr-2" />
-                Ver Repositorio
+                {t.ProjectDetailPage.repositoryButton}
               </a>
             </Button>
 
@@ -106,7 +107,7 @@ export default function ProjectDetailPage() {
               <Button asChild variant="outline" size="lg">
                 <a href={project.blogUrl} target="_blank" rel="noopener noreferrer">
                   <FileText className="w-5 h-5 mr-2" />
-                  Ver Blog del Proyecto
+                  {t.ProjectDetailPage.blogButton}
                 </a>
               </Button>
             )}
@@ -115,7 +116,7 @@ export default function ProjectDetailPage() {
               <Button asChild size="lg">
                 <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
                   <ExternalLink className="w-5 h-5 mr-2" />
-                  Probar Proyecto
+                  {t.ProjectDetailPage.liveButton}
                 </a>
               </Button>
             )}

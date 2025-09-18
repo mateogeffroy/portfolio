@@ -14,7 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <body className={`font-sans m-0 border-0 ${GeistSans.variable} ${GeistMono.variable}`}>
+      <body className={`font-sans m-0 border-0 overflow-x-hidden ${GeistSans.variable} ${GeistMono.variable}`}>
         <LanguageProvider>
           <ThemeProvider
             attribute="class"

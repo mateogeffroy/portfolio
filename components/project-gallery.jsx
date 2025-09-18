@@ -1,299 +1,106 @@
 "use client"
 
+import * as React from 'react'
+import useEmblaCarousel from 'embla-carousel-react'
+import Image from 'next/image'
+import { useLanguage } from '@/components/language-provider'
+import { usePrevNextButtons, PrevButton, NextButton } from './EmblaCarouselArrowButtons'
+import { useDotButton, DotButton } from './EmblaCarouselDotButton'
 
-
-import * as React from "react"
-
-import {
-
- Carousel,
-
- CarouselContent,
-
- CarouselItem,
-
- CarouselNext,
-
- CarouselPrevious,
-
-} from "@/components/ui/carousel"
-
-import Autoplay from "embla-carousel-autoplay"
-
-import Image from "next/image"
-
-import { useLanguage } from "@/components/language-provider"
-
-import {
-
- Dialog,
-
- DialogContent,
-
- DialogTitle,
-
-} from "@/components/ui/dialog"
-
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
-
-import { ChevronLeft, ChevronRight } from "lucide-react"
-
-
+const numberWithinRange = (number, min, max) => Math.min(Math.max(number, min), max)
 
 export default function ProjectGallery({ media }) {
-
- const { locale, t } = useLanguage()
-
- const [api, setApi] = React.useState()
-
- const [current, setCurrent] = React.useState(0)
-
-
-
- const [selectedIndex, setSelectedIndex] = React.useState(null)
-
-
-
- const plugin = React.useRef(
-
-  Autoplay({ delay: 3000, stopOnInteraction: true })
-
- )
-
-
-
- React.useEffect(() => {
-
-  if (!api) return
-
-  const onSelect = () => setCurrent(api.selectedScrollSnap())
-
-  onSelect()
-
-  api.on("select", onSelect)
-
-  return () => api.off("select", onSelect)
-
- }, [api])
-
-
-
- const handleOpenImage = (index) => {
-
-  setSelectedIndex(index)
-
-  plugin.current.stop() // detener autoplay cuando se abre modal
-
- }
-
-
-
- const handleCloseImage = () => {
-
-  setSelectedIndex(null)
-
-  plugin.current.reset() // reanudar autoplay al cerrar modal
-
- }
-
-
-
- const next = () => setSelectedIndex((prev) => (prev + 1) % media.length)
-
- const prev = () => setSelectedIndex((prev) => (prev - 1 + media.length) % media.length)
-
-
-
- return (
-
-  <div>
-
-   <h2 className="text-3xl font-semibold text-foreground mb-6">
-
-    {t.ProjectDetailPage.galleryTitle}
-
-   </h2>
-
-
-
-   {/* Carrusel principal */}
-
-   <Carousel
-
-    plugins={[plugin.current]}
-
-    setApi={setApi}
-
-    onMouseEnter={plugin.current.stop}
-
-    onMouseLeave={plugin.current.reset}
-
-    opts={{ loop: true }}
-
-    className="w-full"
-
-   >
-
-    <CarouselContent>
-
-     {media.map((item, index) => (
-
-      <CarouselItem
-
-       key={index}
-
-       className="md:basis-1/3 sm:basis-1/1"
-
-      >
-
-       <button
-
-        onClick={() => handleOpenImage(index)}
-
-        className="w-full h-full aspect-video relative overflow-hidden rounded-lg cursor-pointer group"
-
-       >
-
-        <Image
-
-         src={item.src}
-
-         alt={item.title[locale] || `Imagen ${index + 1}`}
-
-         fill
-
-         sizes="(max-width: 768px) 100vw, 33vw"
-
-         className="object-cover transition-transform duration-300 group-hover:scale-105"
-
-        />
-
-       </button>
-
-      </CarouselItem>
-
-     ))}
-
-    </CarouselContent>
-
-    <CarouselPrevious />
-
-    <CarouselNext />
-
-   </Carousel>
-
-
-
-   {/* Modal de imagen ampliada */}
-
-   <Dialog open={selectedIndex !== null} onOpenChange={handleCloseImage}>
-
-    <DialogContent className="max-w-4xl bg-transparent border-none shadow-none">
-
-     <VisuallyHidden>
-
-      <DialogTitle>Imagen ampliada</DialogTitle>
-
-     </VisuallyHidden>
-
-
-
-     {selectedIndex !== null && (
-
-      <div className="flex flex-col items-center">
-
-       {/* Imagen principal */}
-
-       <div className="relative flex items-center justify-center max-w-4xl w-full">
-
-        <button
-
-         onClick={prev}
-
-         className="absolute left-0 p-2 text-white"
-
-        >
-
-         <ChevronLeft size={40} />
-
-        </button>
-
-
-
-        <img
-
-         src={media[selectedIndex].src}
-
-         alt={media[selectedIndex].title?.[locale] || ""}
-
-         className="max-h-[80vh] object-contain cursor-zoom-in"
-
-         onClick={(e) => {
-
-          e.currentTarget.classList.toggle("scale-150")
-
-         }}
-
-        />
-
-
-
-        <button
-
-         onClick={next}
-
-         className="absolute right-0 p-2 text-white"
-
-        >
-
-         <ChevronRight size={40} />
-
-        </button>
-
-       </div>
-
-
-
-       {/* Miniaturas */}
-
-       <div className="flex gap-2 mt-4 overflow-x-auto max-w-4xl">
-
-        {media.map((item, idx) => (
-
-         <img
-
-          key={idx}
-
-          src={item.src}
-
-          alt={item.title?.[locale] || ""}
-
-          onClick={() => setSelectedIndex(idx)}
-
-          className={`h-20 w-32 object-cover rounded cursor-pointer transition
-
-           ${idx === selectedIndex
-
-            ? "ring-4 ring-blue-500"
-
-            : "opacity-60 hover:opacity-100"}`}
-
-         />
-
-        ))}
-
-       </div>
-
+  const { locale, t } = useLanguage()
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'center' })
+  const tweenFactor = React.useRef(0)
+
+  const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(emblaApi)
+  const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi)
+
+  const setTweenFactor = React.useCallback((emblaApi) => {
+    tweenFactor.current = 0.84 * emblaApi.scrollSnapList().length
+  }, [])
+
+  const tweenOpacity = React.useCallback((emblaApi, eventName) => {
+    const engine = emblaApi.internalEngine()
+    const scrollProgress = emblaApi.scrollProgress()
+    const slidesInView = emblaApi.slidesInView()
+    const isScrollEvent = eventName === 'scroll'
+
+    emblaApi.scrollSnapList().forEach((scrollSnap, snapIndex) => {
+      let diffToTarget = scrollSnap - scrollProgress
+      const slidesInSnap = engine.slideRegistry[snapIndex]
+
+      slidesInSnap.forEach((slideIndex) => {
+        if (isScrollEvent && !slidesInView.includes(slideIndex)) return
+
+        if (engine.options.loop) {
+          engine.slideLooper.loopPoints.forEach((loopItem) => {
+            const target = loopItem.target()
+            if (slideIndex === loopItem.index && target !== 0) {
+              const sign = Math.sign(target)
+              if (sign === -1) diffToTarget = scrollSnap - (1 + scrollProgress)
+              if (sign === 1) diffToTarget = scrollSnap + (1 - scrollProgress)
+            }
+          })
+        }
+        
+        const tweenValue = 1 - Math.abs(diffToTarget * tweenFactor.current)
+        const opacity = numberWithinRange(tweenValue, 0, 1).toString()
+        emblaApi.slideNodes()[slideIndex].style.opacity = opacity
+      })
+    })
+  }, [])
+
+  React.useEffect(() => {
+    if (!emblaApi) return
+
+    setTweenFactor(emblaApi)
+    tweenOpacity(emblaApi)
+    emblaApi
+      .on('reInit', setTweenFactor)
+      .on('reInit', tweenOpacity)
+      .on('scroll', tweenOpacity)
+  }, [emblaApi, tweenOpacity, setTweenFactor])
+
+
+  return (
+    <div className='relative'>
+      <h2 className="text-3xl font-semibold text-foreground mb-6">
+        {t.ProjectDetailPage.galleryTitle}
+      </h2>
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex -ml-4">
+          {media.map((item, index) => (
+            <div className="flex-grow-0 flex-shrink-0 basis-full md:basis-1/2 lg:basis-1/3 pl-4" key={index}>
+              <div className="aspect-video relative overflow-hidden rounded-lg">
+                <Image
+                  src={item.src}
+                  alt={item.title[locale] || `Imagen ${index + 1}`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-     )}
+      <div className="absolute top-1/2 -translate-y-1/2 w-[calc(100%+2rem)] -ml-4 flex justify-between items-center px-4">
+        <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+        <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+      </div>
 
-    </DialogContent>
-
-   </Dialog>
-
-  </div>
-
- )
-
+      <div className="flex justify-center items-center gap-2 mt-4">
+        {scrollSnaps.map((_, index) => (
+          <DotButton
+            key={index}
+            onClick={() => onDotButtonClick(index)}
+            data-selected={index === selectedIndex}
+          />
+        ))}
+      </div>
+    </div>
+  )
 }

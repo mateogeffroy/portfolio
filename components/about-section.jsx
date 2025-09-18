@@ -4,26 +4,29 @@ import { Card, CardContent } from "@/components/ui/card"
 import { MapPin, Globe, Mail, User, GraduationCap, Code, Database, Wrench, Monitor } from "lucide-react"
 import { useLanguage } from "@/components/language-provider"
 
-const skills = {
-  Frontend: {
-    icon: Monitor,
-    style: "text-primary bg-primary/10",
-    items: ["Next", "React", "JavaScript", "TypeScript", "HTML5", "CSS3", "Tailwind CSS"],
-  },
-  Backend: {
-    icon: Database,
-    style: "text-primary bg-primary/10",
-    items: ["Python", "Node", "Django", "Flask", "PostgreSQL", "SQLite"],
-  },
-  Herramientas: {
-    icon: Wrench,
-    style: "text-primary bg-primary/10",
-    items: ["GitHub", "VS Code", "Visual Studio", "Figma", "Docker", "Postman"],
-  },
-}
-
 export default function AboutSection() {
   const { t } = useLanguage()
+
+  // El objeto 'skills' ahora se define aquí, dentro del componente,
+  // para tener acceso a la función de traducción 't'.
+  const skills = {
+    Frontend: {
+      icon: Monitor,
+      style: "text-primary bg-primary/10",
+      items: ["Next", "React", "JavaScript", "TypeScript", "HTML5", "CSS3", "Tailwind CSS"],
+    },
+    Backend: {
+      icon: Database,
+      style: "text-primary bg-primary/10",
+      items: ["Python", "Node", "Django", "Flask", "PostgreSQL", "SQLite"],
+    },
+    // Usamos una clave dinámica que se actualiza con el idioma.
+    [t.AboutSection.herramientas]: {
+      icon: Wrench,
+      style: "text-primary bg-primary/10",
+      items: ["GitHub", "VS Code", "Visual Studio", "Figma", "Docker", "Postman"],
+    },
+  }
 
   return (
     <section id="sobre-mi" className="py-20 bg-background">
@@ -31,6 +34,7 @@ export default function AboutSection() {
         <h2 className="text-4xl font-bold text-center text-foreground mb-16">{t.AboutSection.titulo}</h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+          {/* Tarjeta de Información Personal */}
           <Card className="bg-card border-0 shadow-2xl shadow-black/20 flex flex-col min-h-[420px]">
             <CardContent className="p-8 flex-grow">
               <h3 className="text-2xl font-semibold mb-6 text-foreground flex items-center gap-3">
@@ -54,6 +58,7 @@ export default function AboutSection() {
             </CardContent>
           </Card>
 
+          {/* Tarjeta de Educación */}
           <Card className="bg-card border-0 shadow-2xl shadow-black/20 flex flex-col min-h-[420px]">
             <CardContent className="p-8 flex-grow">
               <h3 className="text-2xl font-semibold mb-6 text-foreground flex items-center gap-3">
@@ -84,6 +89,7 @@ export default function AboutSection() {
             </CardContent>
           </Card>
 
+          {/* Tarjeta de Habilidades */}
           <Card className="bg-card border-0 shadow-2xl shadow-black/20 flex flex-col min-h-[420px]">
             <CardContent className="p-8 flex-grow">
               <h3 className="text-2xl font-semibold mb-6 text-foreground flex items-center gap-3">

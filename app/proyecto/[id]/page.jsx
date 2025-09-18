@@ -5,7 +5,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, ExternalLink, Github } from "lucide-react"
+import { ArrowLeft, ExternalLink, Github, FileText } from "lucide-react"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import ProjectGallery from "@/components/project-gallery"
@@ -91,23 +91,35 @@ export default function ProjectDetailPage() {
           )}
         </div>
         
+        
+
         <div className="container mx-auto px-4 mt-12">
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                {project.liveUrl && (
-                <Button asChild size="lg">
-                    <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="w-5 h-5 mr-2" />
-                    Ver proyecto en vivo
-                    </a>
-                </Button>
-                )}
-                <Button asChild variant="outline" size="lg">
-                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                    <Github className="w-5 h-5 mr-2" />
-                    Ver código en GitHub
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild variant="outline" size="lg">
+              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                <Github className="w-5 h-5 mr-2" />
+                Ver Repositorio
+              </a>
+            </Button>
+
+            {project.blogUrl && (
+              <Button asChild variant="outline" size="lg">
+                <a href={project.blogUrl} target="_blank" rel="noopener noreferrer">
+                  <FileText className="w-5 h-5 mr-2" />
+                  Ver Blog del Proyecto
                 </a>
-                </Button>
-            </div>
+              </Button>
+            )}
+
+            {project.liveUrl && (
+              <Button asChild size="lg">
+                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="w-5 h-5 mr-2" />
+                  Probar Proyecto
+                </a>
+              </Button>
+            )}
+          </div>
         </div>
 
       </main>

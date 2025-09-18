@@ -39,7 +39,7 @@ export const PrevButton = (props) => {
   const { className, ...restProps } = props
   return (
     <button
-      className={`cursor-pointer absolute top-1/2 -left-10 -translate-y-1/2 bg-card/80 hover:bg-card text-card-foreground rounded-full p-2 z-10 transition-opacity disabled:opacity-0 ${className}`}
+      className={`cursor-pointer absolute top-1/2 -left-15 -translate-y-1/2 hover:bg-card text-card-foreground rounded-full p-2 z-10 transition-opacity disabled:opacity-0 ${className}`}
       type="button"
       {...restProps}
     >
@@ -52,7 +52,7 @@ export const NextButton = (props) => {
   const { className, ...restProps } = props
   return (
     <button
-      className={`cursor-pointer absolute top-1/2 -right-10 -translate-y-1/2 bg-card/80 hover:bg-card text-card-foreground rounded-full p-2 z-10 transition-opacity disabled:opacity-0 ${className}`}
+      className={`cursor-pointer absolute top-1/2 -right-15 -translate-y-1/2 hover:bg-card text-card-foreground rounded-full p-2 z-10 transition-opacity disabled:opacity-0 ${className}`}
       type="button"
       {...restProps}
     >

@@ -7,8 +7,11 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/components/language-provider"
 
 export const metadata = {
-  title: "Mateo Arturo Geffroy - Portfolio",
+  title: "Portfolio",
   description: "Portfolio de Mateo Arturo Geffroy...",
+  icons: {
+    icon: "/icono-mag.png",
+  },
 }
 
 export default function RootLayout({ children }) {

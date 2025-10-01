@@ -6,13 +6,15 @@ import Image from "next/image"
 import { useLanguage } from "@/components/language-provider"
 
 export default function Hero() {
-  const { t } = useLanguage()
+  const { t, locale } = useLanguage()
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId)
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
     }
   }
+
+  const cvPath = `/cv-${locale}.pdf`
 
   return (
     <section
@@ -53,7 +55,7 @@ export default function Hero() {
             asChild
             className="text-lg px-8 py-3 bg-transparent border-white text-white hover:bg-white/50"
           >
-            <a href="/cv.pdf" target="_blank" rel="noopener noreferrer">
+            <a href={cvPath} target="_blank" rel="noopener noreferrer">
               {t.Hero.botonCV}
             </a>
           </Button>

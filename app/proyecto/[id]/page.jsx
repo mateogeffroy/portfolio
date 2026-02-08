@@ -18,7 +18,8 @@ export default function ProjectDetailPage() {
   const { locale, t } = useLanguage() // Obtenemos la función de traducción 't'
   const project = projectsData.find((p) => p.id.toString() === params.id)
 
-  if (!project) {
+  // Modificación: Chequea si no existe O si está oculto explícitamente
+  if (!project || project.isVisible === false) {
     notFound()
   }
 

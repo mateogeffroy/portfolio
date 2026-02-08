@@ -13,6 +13,10 @@ export default function ProjectsSection() {
   const { t } = useLanguage()
 
   const filteredProjects = projectsData.filter((project) => {
+    // Lógica para ocultar proyectos (soft-delete)
+    if (project.isVisible === false) return false
+
+    // Lógica del filtro de categorías
     if (filter === "todos") return true
     return project.category === filter
   })

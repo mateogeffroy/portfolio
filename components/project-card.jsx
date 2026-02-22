@@ -45,23 +45,25 @@ export default function ProjectCard({ project }) {
         <p className="text-muted-foreground text-sm leading-relaxed flex-grow">{project.description[locale]}</p>
       </div>
       <div className="p-6 pt-0 mt-auto grid grid-cols-2 gap-4">
-        <Button asChild size="sm">
+        <Button asChild size="sm" className={!project.githubUrl ? "col-span-2" : ""}>
           <Link href={`/proyecto/${project.id}`}>
             <ExternalLink className="w-4 h-4 mr-2" />
             {t.ProjectCard.viewDetails}
           </Link>
         </Button>
-        <Button variant="ghost" size="sm" asChild onClick={handleGithubClick}>
-          <a
-            href={project.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-foreground hover:bg-transparent hover:underline hover:text-foreground"
-          >
-            <Github className="w-4 h-4 mr-2" />
-            {t.ProjectCard.viewRepository}
-          </a>
-        </Button>
+        {project.githubUrl ? (
+          <Button variant="ghost" size="sm" asChild onClick={handleGithubClick}>
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-foreground hover:bg-transparent hover:underline hover:text-foreground"
+            >
+              <Github className="w-4 h-4 mr-2" />
+              {t.ProjectCard.viewRepository}
+            </a>
+          </Button>
+        ) : null}
       </div>
     </Card>
   )

@@ -31,6 +31,14 @@ export default function ProjectDetailPage() {
       <Navbar />
 
       <main className="pb-16">
+        <div className="container mx-auto px-4 py-6">
+          <Button asChild variant="ghost" className="pl-0 text-muted-foreground hover:text-foreground hover:bg-transparent">
+            <Link href="/#proyectos">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              {t.ProjectDetailPage.backButton}
+            </Link>
+          </Button>
+        </div>
         <section className="relative h-96 w-full overflow-hidden">
           {project.imageNeedsBackground && (
             <div className="absolute inset-0 bg-white z-0" />
@@ -97,13 +105,14 @@ export default function ProjectDetailPage() {
         
         <div className="container mx-auto px-4 mt-12">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild variant="outline" size="lg">
-              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                <Github className="w-5 h-5 mr-2" />
-                {t.ProjectDetailPage.repositoryButton}
-              </a>
-            </Button>
-
+            {project.githubUrl && (
+              <Button asChild variant="outline" size="lg">
+                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                  <Github className="w-5 h-5 mr-2" />
+                  {t.ProjectDetailPage.repositoryButton}
+                </a>
+              </Button>
+            )}
             {project.blogUrl && (
               <Button asChild variant="outline" size="lg">
                 <a href={project.blogUrl} target="_blank" rel="noopener noreferrer">
@@ -112,7 +121,6 @@ export default function ProjectDetailPage() {
                 </a>
               </Button>
             )}
-
             {project.liveUrl && (
               <Button asChild size="lg">
                 <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
@@ -123,9 +131,7 @@ export default function ProjectDetailPage() {
             )}
           </div>
         </div>
-
       </main>
-
       <Footer />
     </div>
   )
